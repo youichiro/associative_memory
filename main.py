@@ -1,9 +1,10 @@
 import copy
+import random
 from tqdm import trange
 
 N = 100  # 入力信号の要素数
 L_max = int(0.4 * N)
-TRIAL = 10000  # 試行回数
+TRIAL = 1000  # 試行回数
 REPEAT = 10  # 想起を繰り返す回数
 PROT = False
 GPU = False
@@ -11,12 +12,14 @@ GPU = False
 if GPU:
     PROT = False
     from gpu import np
+    print('GPU mode')
 else:
     import numpy as np
+    print('CPU mode')
 
 def plus_or_not():
     """-1か+1をランダムに返す"""
-    return np.random.choice([1, -1])
+    return random.choice([1, -1])
 
 def make_memory_patterns(L):
     """記憶パターン(N×L行列)を生成する"""
@@ -69,7 +72,7 @@ def run(L):
             if list(x) == list(y): break
             x = copy.deepcopy(y)
         m = eval_m(y, ans)
-        
+
         if m == 1.0: success += 1
     acc = success / TRIAL * 100
     return acc
