@@ -52,7 +52,7 @@ def signal(x):
 def remember(x, w):
     """入力信号xから出力信号yを想起する"""
     dot = np.dot(w, x)
-    y = np.array([signal(v) for v in dot])
+    y = np.array([signal(v) for v in dot], np.int8)
     return y
 
 def eval_m(y, ans):
