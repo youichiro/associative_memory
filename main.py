@@ -3,10 +3,10 @@ import random
 from tqdm import trange
 
 # define
-N = 100  # 入力信号の要素数
+N = 1000  # 入力信号の要素数
 L_max = int(0.4 * N)
 TRIAL = 1000  # 試行回数
-REPEAT = 10  # 想起を繰り返す回数
+REPEAT = 1000  # 想起を繰り返す回数
 PROT = False
 GPU = False
 
@@ -40,10 +40,6 @@ def make_coupling_matrix(e, L):
             w[i][j] = sum(e[r][i] * e[r][j] for r in range(L)) / N
             if i == j: w[i][j] = 0.0
     return w
-
-def make_input_pattern():
-    """入力信号(1×N行列)を生成する"""
-    return np.array([plus_or_not() for i in range(N)], dtype=np.int8)
 
 def signal(x):
     """入力値が正なら+1, 負なら-1, 0なら0を返す"""
