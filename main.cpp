@@ -1,15 +1,14 @@
-#include <stdio.h>
-#include <iostream>
 #include <random>
+#include <iostream>
 #include <vector>
 #include <fstream>
 using namespace std;
 
-#define N 100  //入力信号の要素数
+#define N 1000  //入力信号の要素数
 #define L_max (int) (N * 0.4)
-#define TRIAL 10  // 試行回数
+#define TRIAL 1000  // 試行回数
 #define REPEAT 1000  // 想起を繰り返す回数
-
+#define FILENAME "log_cpp.txt"
 
 int p_or_n(){
     // +1か-1を返す
@@ -60,8 +59,9 @@ int main(){
     int y[N] = {};
 
     // 出力ファイル
-    ofstream f("log.txt");
+    ofstream f(FILENAME);
     f << "// N: " << N << ", L_max: " << L_max << ", TRIAL: " << TRIAL << ", REPEAT: " << REPEAT << '\n';
+    std::cout << "// N: " << N << ", L_max: " << L_max << ", TRIAL: " << TRIAL << ", REPEAT: " << REPEAT << '\n';
 
     for (L = 1; L <= L_max; L++){
         // 2次元配列(N×L行列)の動的生成
@@ -131,7 +131,7 @@ int main(){
                 success += 1;
         }
         acc = 100.0 * success / TRIAL;
-        
+
         // 結果の表示
         std::cout << L << '\t' << acc << '\n';
         f << L << '\t' << acc << '\n';
@@ -140,3 +140,4 @@ int main(){
     f.close();
     return 0;
 }
+
