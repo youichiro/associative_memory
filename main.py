@@ -1,12 +1,18 @@
 import copy
-import numpy as np
 from tqdm import trange
-import matplotlib.pyplot as plt
 
 N = 100  # 入力信号の要素数
 L_max = int(0.4 * N)
 TRIAL = 10000  # 試行回数
 REPEAT = 10  # 想起を繰り返す回数
+PROT = False
+GPU = False
+
+if GPU:
+    PROT = False
+    from gpu import np
+else:
+    import numpy as np
 
 def plus_or_not():
     """-1か+1をランダムに返す"""
@@ -39,10 +45,7 @@ def signal(x):
 
 def remember(x, w):
     """入力信号xから出力信号yを想起する"""
-    y = []
-    for i in range(N):
-        y += [signal(sum(w[i][j] * x[j] for j in range(N)))]
-    return y
+    return np.dot(w, x)
 
 def eval_m(y, ans):
     """出力ベクトルと記憶ベクトルとの一致率を計算する"""
@@ -63,7 +66,7 @@ def run(L):
 
         for _ in range(REPEAT):
             y = remember(x, w)
-            if list(x) == y: break
+            if list(x) == list(y): break
             x = copy.deepcopy(y)
         m = eval_m(y, ans)
         
@@ -80,18 +83,20 @@ def main():
         acc = run(L + 1)
         accs.append(acc)
         with open('log.txt', 'a') as f:
-            f.write('L: {}\tAcc. {:.2f}\n'.format(L+1, acc))
+            f.write('{}\t{:.2f}\n'.format(L+1, acc))
 
     print()
     for L, acc in zip(L_list, accs):
         print('L: {}\tacc. {:.2f}'.format(L, acc))
 
     # plot
-    plt.plot(L_list, accs)
-    plt.xlabel('L')
-    plt.ylabel('平均成功率[%]')
-    plt.ylim(0.0, 110.0)
-    plt.show()
+    if PROT:
+        import matplotlib.pyplot as plt
+        plt.plot(L_list, accs)
+        plt.xlabel('L')
+        plt.ylabel('平均成功率[%]')
+        plt.ylim(0.0, 110.0)
+        plt.show()
 
 
 if __name__ == '__main__':
