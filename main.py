@@ -2,12 +2,14 @@ import copy
 import random
 from tqdm import trange
 
+# define
 N = 100  # 入力信号の要素数
 L_max = int(0.4 * N)
 TRIAL = 1000  # 試行回数
 REPEAT = 10  # 想起を繰り返す回数
 PROT = False
 GPU = False
+
 
 if GPU:
     PROT = False
@@ -16,6 +18,7 @@ if GPU:
 else:
     import numpy as np
     print('CPU mode')
+
 
 def plus_or_not():
     """-1か+1をランダムに返す"""
@@ -48,7 +51,9 @@ def signal(x):
 
 def remember(x, w):
     """入力信号xから出力信号yを想起する"""
-    return np.dot(w, x)
+    dot = np.dot(w, x)
+    y = np.array([signal(v) for v in dot])
+    return y
 
 def eval_m(y, ans):
     """出力ベクトルと記憶ベクトルとの一致率を計算する"""
