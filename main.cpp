@@ -9,8 +9,7 @@ using namespace std;
 #define L_max (int) (N * 0.5)
 #define TRIAL 1000  // 試行回数
 #define REPEAT 100  // 想起を繰り返す回数
-#define FILENAME "logN1kT1kR100.txt"
-#define LEVEL 1
+#define FILENAME "log_test.txt"
 
 
 bool check_file_exist(const std::string& str){
@@ -63,9 +62,7 @@ int main(){
     int L, i, j, t, r, n, success, noise_pos, p;
     double sum, m, acc;
     double w[N][N] = {};
-    double wt[N][N] = {};
     int ans[N] = {};
-    int anst[N] = {};
     int x[N] = {};
     int y[N] = {};
 
@@ -97,46 +94,6 @@ int main(){
             }
         }
 
-        // eの直交ベクトル行列et(N×L)の宣言
-        vector< vector<int> > et;
-        et.resize(L);
-        for (i = 0; i < L; i++){
-            et[i].resize(N);
-        }
-        // etを1で初期化
-        for (i = 0; i < L; i++){
-            for (j = 0; j < N; j++){
-                et[i][j] = 1;
-            }
-        }
-
-        // eの直交ベクトル行列etを作成
-        for (i = 0; i < L; i++){
-            // 内積を計算
-            p = 0;
-            for (j = 0; j < N; j++){
-                p += e[i][j] * et[i][j];
-            }
-            // 内積が負ならetを-1で初期化
-            if (p < 0){
-                for (j = 0; j < N; j++){
-                    et[i][j] = -1;
-                }
-            }
-            // etベクトルを変更
-            if (p != 0){
-                n = 0;
-                j = 0;
-                while (n < (int)abs(p) / 2){
-                    if (e[i][j] == et[i][j]){
-                        et[i][j] = -et[i][j];
-                        n++;
-                    }
-                    j++;
-                }
-            }
-        }
-
         // 記憶パターンから結合係数行列を作成(w)
         for (i = 0; i < N; i++){
             for (j = 0; j < N; j++){
@@ -152,21 +109,6 @@ int main(){
             }
         }
 
-        // 記憶パターンから結合係数行列を作成(w2)
-        for (i = 0; i < N; i++){
-            for (j = 0; j < N; j++){
-                if (i != j){
-                    sum = 0.0;
-                    for (r = 0; r < L; r++){
-                        sum += e[r][i] * et[r][j];
-                    }
-                    wt[i][j] = (double)sum;
-                } else {
-                    wt[i][j] = 0.0;
-                }
-            }
-        }
-
         // 試行ループ
         success = 0;
         for (t = 0; t < TRIAL; t++){
@@ -174,7 +116,6 @@ int main(){
             noise_pos = choice(N);
             for (i = 0; i < N; i++){
                 ans[i] = e[r][i];
-                anst[i] = et[r][i];
                 x[i] = e[r][i];
             }
             x[noise_pos] = -x[noise_pos];
@@ -185,11 +126,7 @@ int main(){
                 for (i = 0; i < N; i++){
                     sum = 0.0;
                     for (j = 0; j < N; j++){
-                        if (LEVEL == 1){
-                            sum += (1 - w[i][j]) * w[i][j] * x[j];
-                        } else {
-                            sum += wt[i][j] * x[j];
-                        }
+                        sum += (1 - w[i][j]) * w[i][j] * x[j];
                     }
                     y[i] = signal(sum);
                 }
@@ -204,12 +141,7 @@ int main(){
                 }
             }
             // 評価
-            if (LEVEL == 1){
-                m = eval_m(y, ans);
-            } else {
-                // m = eval_m(y, ans);
-                m = eval_m(y, anst);
-            }
+            m = eval_m(y, ans);
             if (m == 1.0)
                 success += 1;
         }
