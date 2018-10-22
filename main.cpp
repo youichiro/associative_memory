@@ -7,10 +7,10 @@ using namespace std;
 
 #define N 1000  //入力信号の要素数
 #define L_max (int) (N * 0.5)
-#define TRIAL 100  // 試行回数
+#define TRIAL 1000  // 試行回数
 #define REPEAT 100  // 想起を繰り返す回数
-#define FILENAME "log_2.txt"
-#define LEVEL 1  //想起の計算方法 LEVEL=1: wx, LEVEL=2: (1-w)wx, LEVEL=3: (1-w+)wx
+#define FILENAME "logN1kT1kR100.txt"
+#define LEVEL 1
 
 
 bool check_file_exist(const std::string& str){
