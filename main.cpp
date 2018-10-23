@@ -142,7 +142,7 @@ int main(){
             }
             // 評価
             m = eval_m(y, ans);
-            if (m == 1.0)
+            if (m == 1.0 || m == -1.0)
                 success += 1;
         }
         acc = 100.0 * success / TRIAL;

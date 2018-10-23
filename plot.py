@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 
-filename = 'logN1kT5kR1k.txt'
+filename = 'logN1kT1kR100.txt'
 N = 1000
 
 logs = open(filename).readlines()
